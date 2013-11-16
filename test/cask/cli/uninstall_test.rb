@@ -2,15 +2,15 @@ require 'test_helper'
 
 describe Cask::CLI::Uninstall do
   it "shows an error when a bad cask is provided" do
-    TestHelper.must_output(self, lambda {
+    lambda {
       Cask::CLI::Uninstall.run('notacask')
-    }, 'Error: No available cask for notacask')
+    }.must_raise CaskUnavailableError
   end
 
   it "shows an error when a cask is provided that's not installed" do
-    TestHelper.must_output(self, lambda {
+    lambda {
       Cask::CLI::Uninstall.run('anvil')
-    }, 'Error: anvil is not installed')
+    }.must_raise CaskNotInstalledError
   end
 
   it "can uninstall and unlink multiple casks at once" do
@@ -33,5 +33,11 @@ describe Cask::CLI::Uninstall do
     Cask.appdir.join('Transmission.app').wont_be :symlink?
     transmission.wont_be :installed?
     Cask.appdir.join('Caffeine.app').wont_be :symlink?
+  end
+
+  it "raises an exception when no cask is specified" do
+    lambda {
+      Cask::CLI::Uninstall.run
+    }.must_raise CaskUnspecifiedError
   end
 end

@@ -18,6 +18,7 @@ require 'cask/installer'
 require 'cask/link_checker'
 require 'cask/locations'
 require 'cask/pkg'
+require 'cask/pretty_listing'
 require 'cask/scopes'
 require 'cask/system_command'
 require 'cask/underscore_supporting_uri'
@@ -54,7 +55,7 @@ class Cask
     if cask_title.include?('/')
       cask_with_tap = cask_title
     else
-      cask_with_tap = all_titles.grep(/#{cask_title}$/).first
+      cask_with_tap = all_titles.find { |t| t.split('/').last == cask_title }
     end
 
     if cask_with_tap
@@ -109,8 +110,12 @@ class Cask
     @title = title
   end
 
+  def caskroom_path
+    self.class.caskroom.join(self.title)
+  end
+
   def destination_path
-    self.class.caskroom.join(self.title).join(self.version)
+    caskroom_path.join(self.version)
   end
 
   def installed?

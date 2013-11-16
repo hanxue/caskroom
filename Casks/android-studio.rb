@@ -1,7 +1,7 @@
 class AndroidStudio < Cask
-  url 'https://dl-ssl.google.com/android/studio/ide-zips/0.3.0/android-studio-ide-132.878379-mac.zip'
+  url 'http://dl.google.com/dl/android/studio/ide-zips/0.3.5/android-studio-ide-132.910074-mac.zip'
   homepage 'https://developer.android.com/sdk/installing/studio.html'
-  version '0.3.0 build-132.878379'
-  sha1 '16fceb7aa591c539df90cf2064179bac53209525'
+  version '0.3.5 build-132.910074'
+  sha1 '507a34d38f633010133542ea96df821462788aee'
   link 'Android Studio.app'
 end

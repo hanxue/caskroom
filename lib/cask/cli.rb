@@ -33,6 +33,10 @@ class Cask::CLI
     rest = process_options(rest)
     Cask.init
     lookup_command(command).run(*rest)
+  rescue CaskError => e
+    onoe e
+    $stderr.puts e.backtrace if @debug
+    exit 1
   end
 
   def self.nice_listing(cask_list)
@@ -61,13 +65,16 @@ class Cask::CLI
       opts.on("--prefpanedir=MANDATORY") do |v|
         Cask.prefpanedir = Pathname(v).expand_path
       end
+      opts.on("--debug") do |v|
+        @debug = true
+      end
     end
   end
 
   def self.process_options(args)
     all_args = Shellwords.shellsplit(ENV['HOMEBREW_CASK_OPTS'] || "") + args
     remaining = []
-    while !all_args.empty?
+    until all_args.empty?
       begin
         head = all_args.shift
         remaining.concat(parser.parse([head]))
